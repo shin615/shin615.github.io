@@ -345,8 +345,9 @@ h1, h2, h3, h4, h5, h6 {
 	margin-top: 30px;
 	background-repeat: no-repeat !important;
 	background-position: center center !important;
-	background-size: cover !important;
-	height: 200px;
+	background-size: auto;
+	height: 100%;
+    width: auto;
 }
 .list-style {
 	width: 14px;

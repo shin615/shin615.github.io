@@ -1182,8 +1182,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 30px;
   background-repeat: no-repeat !important;
   background-position: center center !important;
-  background-size: cover !important;
+  background-size: contain !important;
   height: 200px;
+  width: 100%;
 }
 
 .list-style {
@@ -2725,6 +2726,21 @@ h6 {
     flex: 100%;
     max-width: 100%;
   }
+}
+
+@media only screen and (max-width: 1024px) {
+    .generic-banner-auxilia {
+        background: url(../img/Auxilia/HeaderImage-sm.jpg)
+    }
+    .generic-banner-soaring {
+        background: url(../img/Soaring/HeaderImageSOARing-sm.jpg)
+    }
+    .generic-banner-vitaminall {
+        background: url(../img/Vitaminall/HeaderIamgeVitaminall-sm.jpg)
+    }
+    .generic-banner-aclara {
+        background: url(../img/Aclara/HeaderImageAclara-sm.jpg)
+    }
 }
 
 .img-center{
