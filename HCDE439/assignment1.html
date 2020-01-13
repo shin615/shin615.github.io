@@ -4,7 +4,7 @@
         <meta charset="utf-8"> 
         <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-        <title>Example Student's HCDE 439 Physical Computing Page!</title> 
+        <title>Seung Won's HCDE 439 Physical Computing Page!</title> 
 
         <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
 
@@ -12,12 +12,71 @@
     <body> 
 
         <div class="header">
-            <h1>Example Student's Assignment 1!</h1>
+            <h1>Seung Won's Assignment 1: Blink!</h1>
             <p>
-            <img src="red-panda.jpg" width=400></a>
+            <img src="blink.gif" width=400>
             </p>
             <p>
-            Here is all the documentation for assignment 1!
+                This gif shows the pattern that I created using arduino code. For this circuit I had the green LEDs blink in sync while the red one would blink on the opposite pattern. So, whenever the green LEDs turned on the red led would be off and when the red LED turned on the green LEDs would turn off.
+            </p>
+                
+            <p>
+                In order to acheive this pattern the code that I used was based off of the template blink code provided in arduino with a few tweaks. Here is the code that I used below:
+            </p>
+            <code>
+                // the setup function runs once when you press reset or power the board<br>
+                void setup() {<br>
+                    <blockquote>// initialize digital pin 8 as an output.<br>
+                    pinMode(8, OUTPUT);<br>
+                    // initialize digital pin 10 as an output.<br>
+                    pinMode(10, OUTPUT);<br>
+                    // initialize digital pin 12 as an output.<br>
+                    pinMode(12, OUTPUT);<br>
+                </blockquote>
+                }<br><br>
+                    
+                // the loop function runs over and over again forever<br>
+                // for my led display although each led is powered by a seperate digital pin I wanted them to blink<br>
+                // in a pattern so I had two turn on and off in sync while the other led would turn on and off on the<br>
+                // opposite pattern<br>
+                void loop() {<br>
+                <blockquote>
+                    // This has two of the leds turn on in sync <br>
+                    // turns one of the green LEDs on (HIGH is the voltage level)<br>
+                    digitalWrite(8, HIGH); <br>
+                    // turns the other green LED on (HIGH is the voltage level)  <br>
+                    digitalWrite(12, HIGH); <br>
+                    // wait for 0.1 seconds   <br>
+                    delay(100); <br>
+                    // turns one of the green LEDs off by making the voltage LOW <br>                      
+                    digitalWrite(12, LOW); <br>
+                    // turns the other green LED off by making the voltage LOW  <br>  
+                    digitalWrite(8, LOW); <br>
+                    // wait for 0.1 seconds    <br>
+                    delay(100);<br>
+                    // turns the red LED on (HIGH is the voltage level) <br>          
+                    digitalWrite(10, HIGH); <br>
+                    // wait for 0.2 seconds  <br>
+                    delay(200);  <br>
+                    // turn the red LED off by making the voltage LOW <br>                    
+                    digitalWrite(10, LOW); <br>    
+                    // wait for 0.2 seconds <br>
+                    delay(200);<br>  </blockquote>
+                }
+            </code>
+            <p>
+            One change that I made was that instead of having just one digital pin there were three different digital pins in use, one for each of the LEDs. The second change is that rather than each of them being on seperate delays/patterns I grouped the code that turned on and off the green LEDs into one delay group and let the code that controlled the red LED in a seperate delay group. The final change that I made was that the delay for the green LEDs, rather than being 1 second was 0.1 seconds long and the delay for the red LED rather than being 1 second is 0.2 seconds long.<br><br>
+            </p>
+            
+            <img src="Blink%20Circuit.jpg" width="400">
+            <p>
+            The image above shows the actual circuits in detail without the LEDs blinking so that the circuit can be seen in detail. In this case I color coded the breadboard jumper wires so that I wouldn't get confused about whether it was positive or negative and could be clearly understood by others as well. I have one blue wire connecting from the ground pin of the arduino to the negative power bus. Then I connected each of the pins that I chose to the prototyping area using red wires. Then, I connected one end of a 220 resistor on the same horizontal line as the red wires then connected it to a spot one row down for each one. After that I connected an LEDs positive wire to the same row as the end of the resistor for each one. Then a blue wire was connected from the row of the LEDs negative sides to the grounded negative power bus.
+            </p>
+            
+            <img src="IMG_1757.jpg" width="400">
+            
+            <p style="padding-bottom: 2em">
+            This is the schematic for the circuit shown previously. In this case we see the schematic showing the pin that each circuit goes from the value of the resistor that is goes through the kind of LED that it travels through and finally that to complete the circuit that it travels to ground. In this case I used the 220 resistors because I assumed that each ciruit would get 5V but since both the green and red LEDs have a voltage drop of 1.8V and the current would be around 0.02 Amperes I calculated that it would need a resistance of 160 which was rounded up to 220 since that was the resistor that was the closest to 220 without being too low.
             </p>
         </div>
         
