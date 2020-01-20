@@ -4,7 +4,7 @@
         <meta charset="utf-8"> 
         <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-        <title>Example Student's HCDE 439 Physical Computing Page!</title> 
+        <title>Seung Won's HCDE 439 Physical Computing Page!</title> 
 
         <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
 
@@ -12,12 +12,160 @@
     <body> 
 
         <div class="header">
-            <h1>Example Student's Assignment 2!</h1>
+            <h1>Seung Won's Assignment 2: Fade!</h1>
             <p>
-            <img src="red-panda.jpg" width=400></a>
+            <img src="Fade.gif" width=400>
             </p>
             <p>
-            Here is all the documentation for assignment 2!
+                This gif shows the Fade behavior that I exectued using the RGB LED and a pushbutton. Although the gif wasn't able to show the entire sequence, first the LED would flash through three different colors then, when the button is pressed the RGB LED would fade in a sequence of red, green, and finally blue. 
+            </p>
+            <p>
+                To do this I modified two different code snippets shown in class and combined them. One was the pushbutton code and the other was the for loop used to make the LED fade. The entirety of the code is shown below.
+            </p>
+            <code>
+            // code for the pushCheck and Fade behaviors modified from<br>
+            // in class examples, found in slidedeck L3: Pin Use.<br><br>
+            
+            // constant variables established to set the pin numbers<br>
+            // used for pin connected to button.<br>
+            const int buttonPin = 2;<br>
+            // used to connect pin to red LED<br>
+            const int redPin = 11;<br>
+            // used to connect pin to green LED<br>
+            const int greenPin = 9;<br>
+            // used to connect pin to blue LED<br>
+            const int bluePin = 6;<br>
+            // variable assigned store store the value given by digitalRead<br>
+            // which will check if the button has been pushed<br>
+            int pushCheck = 0;<br><br>
+
+            void setup() {
+                <blockquote>// put your setup code here, to run once:<br>
+                // initializes the pin for the red LED as an output<br>
+                pinMode(redPin, OUTPUT);<br>
+                // initializes the pin for the green LED as an output<br>
+                pinMode(greenPin, OUTPUT);<br>
+                // initializes the pin for the blue LED as an output<br>
+                pinMode(bluePin, OUTPUT);<br>
+                // initializes  the pin for the pushbutton as an input<br>
+                pinMode(buttonPin, INPUT);</blockquote>
+            }<br><br>
+
+            void loop() {<br>
+                <blockquote>// put your main code here, to run repeatedly:<br>
+                // reads the state of the pushbutton value<br>
+                pushCheck = digitalRead(buttonPin);<br><br>
+
+                // checks if the button has been pressed, the button has been<br>
+                // pressed if the pushCheck value is high<br>
+                if(pushCheck == HIGH) {<br>
+                <blockquote>// resets the value for the red LED pin to zero<br>
+                analogWrite(redPin, 0);<br>
+                // resets the value for the blue LED pin to zero<br>
+                analogWrite(bluePin, 0);<br>
+                // resets the value for the green LED pin to zero<br>
+                analogWrite(greenPin, 0);<br>
+
+                // automatically changes the value of the analog write<br>
+                // from 0 up to 256<br>
+                for(int i = 0; i &lt; 256;i++){<br>
+                    <blockquote>// sets the value of the red LED pin to the value of i<br>
+                    analogWrite(redPin, i);<br>
+                    // waits for 0.01 seconds<br>
+                    delay(10);<br>
+                    </blockquote>
+                }<br>
+                // automatically changes the value of the analog write<br>
+                // from 256 down to 0 <br>
+                for(int i = 256; i >= 0;i--){<br>
+                    <blockquote>// sets the value of the red LED pin to the value of i<br>
+                    analogWrite(redPin, i);<br>
+                    // waits for 0.01 seconds<br>
+                    delay(10);<br>
+                    </blockquote>
+                }<br>
+                // automatically changes the value of the analog write<br>
+                // from 0 up to 256 <br>
+                for(int i = 0; i &lt; 256;i++){<br>
+                    <blockquote>// sets the value of the green LED pin to the value of i<br>
+                    analogWrite(greenPin, i);<br>
+                    // waits for 0.01 seconds<br>
+                    delay(10);<br>
+                    </blockquote>
+                }<br>
+                // automatically changes the value of the analog write<br>
+                // from 256 down to 0 <br>
+                for(int i = 256; i >= 0;i--){<br>
+                    <blockquote>// sets the value of the green LED pin to the value of i<br>
+                    analogWrite(greenPin, i);<br>
+                    // waits for 0.01 seconds<br>
+                    delay(10);<br>
+                    </blockquote>
+                }<br>
+                // automatically changes the value of the analog write<br>
+                // from 0 up to 256 <br>
+                for(int i = 0; i &lt; 256;i++){<br>
+                    <blockquote>// sets the value of the blue LED pin to the value of i<br>
+                    analogWrite(bluePin, i);<br>
+                    // waits for 0.01 seconds<br>
+                    delay(10);<br>
+                    </blockquote>
+                }<br>
+                // automatically changes the value of the analog write<br>
+                // from 256 down to 0 <br>
+                for(int i = 256; i >= 0;i--){ <br>
+                    <blockquote>// sets the value of the blue LED pin to the value of i<br>
+                    analogWrite(bluePin, i);<br>
+                    // waits for 0.01 seconds<br>
+                    delay(10);<br>
+                    </blockquote>
+                }
+                </blockquote>
+            } else {<br>
+                <blockquote>// sets the value of the red LED Pin to 200<br>
+                analogWrite(redPin, 200);<br>
+                // sets the value of the green LED Pin to 20<br>
+                analogWrite(greenPin, 20);<br>
+                // sets the value of the blue LED Pin to 30<br>
+                analogWrite(bluePin, 30);<br>
+                // waits for 0.5 seconds<br>
+                delay(500);<br>
+                // sets the value of the red LED Pin to 10<br>
+                analogWrite(redPin, 10);<br>
+                // sets the value of the green LED Pin to 200<br>
+                analogWrite(greenPin, 200);<br>
+                // sets the value of the blue LED Pin to 10<br>
+                analogWrite(bluePin, 10);<br>
+                // waits for 0.5 seconds<br>
+                delay(500);<br>
+                // sets the value of the red LED Pin to 20<br>
+                analogWrite(redPin, 20);<br>
+                // sets the value of the green LED Pin to 10<br>
+                analogWrite(greenPin, 10);<br>
+                // sets the value of the blue LED Pin to 200<br>
+                analogWrite(bluePin, 200);<br>
+                // waits for 0.5 seconds<br>
+                delay(500);<br>
+                </blockquote>
+            }<br>
+            </blockquote>
+            }<br>
+            </code>
+            <p>
+            One change that I made was that I changed the name of the variable that would store the data that checks whether the button was pushed was changed to pushCheck. In addition, I added in the code that would happen during the else, in this case what the LED would do when the button wasn't pushed. With this circuit when the button wasn't pushed it would flash through three colors each of which was a mix of the three colors at different intensities. The last change that I added was that every time the button was pushed I added in a reset where it would zero out the values of all three color elements to make sure it faded into the right colors.
+            </p>
+            
+            <img src="IMG_1761.jpg" width="241">
+            <img src="IMG_1763.jpg" width="400">
+            <img src="IMG_1765.jpg" width="408">
+            
+            <p>
+            The three images above help show the circuit in detail. In this case I color coded the each of the wires connected to the pins that would feed into each of the elements of the RGB LED by color. So, the one that would go to the Red element got a red wire, the one that would go to the Green element got a green wire, and finally the wire that would go to the Blue element was blue. Accordingly because some of the LED elements had different voltage drops they got different resistors. Because the red LED and the green LED both have a voltage drop of 1.8 they were given 220 resistors, on the other hand because the blue LED has a voltage drop of 3.3 it was given a 100 resistor. For the pushbotton I put in a 10 k resistor because I read that it was the generic catchall that would be able to safely limit current flow with so many different wires going.
+            </p>
+            
+            <img src="IMG_1771.jpg" width="400">
+            <p style="padding-bottom: 2em">
+            Finally, the image above shows the schematic that I drew for this assignment's circuit. In this case I seperated into two seperate schematics. One is the schematic for the push button. In this schematic we can see that it starts at the 5V pin, which feeds into the pushbutton switch. Then, it goes to the #2 pin and the current flows through the 10 k resistor to end up in ground. The other schematic outlines the circuitry used for the RGB LED, each has the pin it starts at. Then, it leads to the resistors, 220 for red and green and 100 for the blue, then they all flow into the resistor where some voltage is lost, finally it flows to ground.
             </p>
         </div>
         

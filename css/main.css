@@ -2599,6 +2599,12 @@ h6 {
   background-repeat: no-repeat;
 }
 
+.generic-banner-firstlove{
+  background: url(../img/FirstLove/FirstLoveBanner.jpg) center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .generic-banner-about{
   background: url(../img/About.jpg) center;
   background-size: cover;
