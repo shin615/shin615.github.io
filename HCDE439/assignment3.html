@@ -1,0 +1,143 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Seung Won's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+            <h1>Seung Won's Assignment 3: Input Output!</h1>
+            <p>
+            <img src="InputOutput.gif" width=400>
+            </p>
+            <p>
+                The gif shown above shows the RGB LED changing behavior based on the amount of light that is being shone on the photo resistor. For this sequence I had it just shine white by having all three colors turn on. Then, when the I covered the photoresistor it would flash through red, green, and blue until it was uncovered again.
+            </p>
+            <p>
+                To do this I modified some code from the example code AnalogInOut Serial, along with adding the code that would make the LED flash how I wanted it to.
+            </p>
+            <code>
+                // Some code was taken from the original AnalogInOutSerial Example <br>
+                // mainly the section on Serial.print so that I could be sure that <br>
+                // the measurements I was getting from the analog in pin were correct <br><br>
+
+                // constant variable set to the Analog input pin we will be <br>
+                // receiving data from <br>
+                const int analogInput = A0; <br>
+                // constant variable set to the digital pin that will be written to <br>
+                // and powers the red LED <br>
+                const int redLED = 3; <br>
+                // constant variable set to the digital pin that will be written to <br>
+                // and powers the green LED <br>
+                const int greenLED = 6; <br>
+                // constant variable set to the digital pin that will be written to <br>
+                // and powers the green LED <br>
+                const int blueLED = 9; <br><br>
+
+                // the variable sensorValue is set to zero so that it can store the <br>
+                // int value read from the A0 input pin <br>
+                int sensorValue = 0; <br>
+                // the variable outputValueLight is set to zero so that it can <br>
+                // store the int value mapped to the correct range <br>
+                int outputValueLight = 0; <br><br>
+
+                void setup() { <br>
+                    <blockquote>
+                    // initializes the serial communications at 9600 bps, taken from <br>
+                    // example code <br>
+                    Serial.begin(9600); <br>
+                    </blockquote>
+                } <br><br>
+
+                void loop() { <br>
+                    <blockquote>
+                    // put your main code here, to run repeatedly: <br>
+                    // reads the analog value given by the light sensor <br>
+                    sensorValue = analogRead(analogInput); <br>
+                    // sets the value read from the sensor inversely to the <br>
+                    // correct range so that when the sensor is covered and <br>
+                    // it is dark it will still give a high value that lets <br>
+                    // the LED light up <br>
+                    outputValueLight = map(sensorValue, 700, 150, 0 ,255); <br>
+                    // checks whether the sensor is in the dark or not, <br>
+                    // if the value of the sensor is less than 690 that means that <br>
+                    // it is in the dark <br>
+                    if(sensorValue 	&#60; 690) { <br>
+                        <blockquote>
+                        // makes the red LED light up due to the high output value <br>
+                        analogWrite(redLED, outputValueLight); <br>
+                        // keeps the green LED dark <br>
+                        analogWrite(greenLED, 0); <br>
+                        // keeps the blue LED dark <br>
+                        analogWrite(blueLED, 0); <br>
+                        // waits for a second <br>
+                        delay(100); <br>
+                        // keeps the red LED dark <br>
+                        analogWrite(redLED, 0); <br>
+                        // makes the green LED light up due to the high output value <br>
+                        analogWrite(greenLED, outputValueLight); <br>
+                        // keeps the blue LED dark <br>
+                        analogWrite(blueLED, 0); <br>
+                        // waits for a second <br>
+                        delay(100); <br>
+                        // keeps the red LED dark <br>
+                        analogWrite(redLED, 0); <br>
+                        // keeps the green LED dark <br>
+                        analogWrite(greenLED, 0); <br>
+                        // makes the blue LED light up due to the high output value <br>
+                        analogWrite(blueLED, outputValueLight); <br>
+                        // waits for a second <br>
+                        delay(100); <br>
+                        </blockquote>
+                    } else { // if it is not dark it makes the LED light up with white light <br>
+                        <blockquote>
+                        // makes the red LED light up at full intensity <br>
+                        analogWrite(redLED, 255); <br>
+                        // makes the green LED light up at full intensity <br>
+                        analogWrite(greenLED, 255); <br>
+                        // makes the blue LED light up at full intensity <br>
+                        analogWrite(blueLED, 255); <br>
+                        </blockquote>
+                    } <br><br>
+
+                    // print the results to the Serial Monitor: (taken from the example code) <br>
+                    // prints the phrase sensor = in the Serial Moniter <br>
+                    Serial.print("sensor = "); <br>
+                    // prints the actual sensor value <br>
+                    Serial.print(sensorValue); <br>
+                    // prints the phrase output = in the Serial Monitor <br>
+                    Serial.print("\t output = "); <br>
+                    // prints the calculated output value <br>
+                    Serial.println(outputValueLight); <br><br>
+
+                    // wait 2 milliseconds before the next loop for the analog-to-digital <br>
+                    // converter to settle after the last reading: (taken from example code) <br>
+                    delay(2); <br>
+            </blockquote>
+            } <br>
+            </code>
+            <p>
+            I added variables for each of the output pins that corresponded to each of the colors of the RGB LED, then changed the output variable's name to outputValueLight to denote it would make whatever I put it on light up. So, with this code, when the sensor's value dropped below 690, which is what the reading was when light was shone on the sensor in just using the sensor moniter code without any light ups or anything and mapped from the 0-1023 values to 0-255, it would begin the sequence of flashing through red, green, and blue. Otherwise it would just shine white by having all three elements shine at the same time. 
+            </p>
+            
+            <img src="IMG_1785.jpg" width="324">
+            <img src="IMG_1786.jpg" width="602">
+            
+            <p>
+            The images shown above display the circuit created for this assignment. In this case on the upper part of the breadboard we can see the voltage divider comprised of a 10k Resistor and a Photoresistor, connected to the 5V power source, the A0 analog pin, and ground. On the lower part we see the RGB LED connected to three pins by three different wires. We can also see that each of the elements have the correct resistor with 220 resistors given to the red and green elements and a 100 resistor given to the blue element.
+            </p>
+            
+            <img src="IMG_1789.jpg" width="400">
+            <p style="padding-bottom: 2em">
+            This final image shows the schematics for the circuit used for this project along with the calculation used to figure out the resistor needed for the voltage divider. In this case the schematic for the voltage divider is shown seperately from the schematic for the RGB LED. The voltage divider schematic shows it starting at the 5V pin, traveling through the photoresistor, diverging to the A0 pin so that it can read the values from the photoresistor, then traveling through the 10K resistor before going to ground. With the RGB LED we see them start at their respective pins then traveling to the resistor for that element then traveling through the corresponding color LED before ending at ground. For the calculation that was used for finding the resistor that would accompany the photoresistor. We know that there is 5V traveling through the circuit and that a maximum of 40 mA can travel through the arduino so using Ohm's Law we know that a minimum of 125 Ohm resistor is required. However, in this case I used a 10K resistor because it covers the minimum resistance required and can match the 10K resistance that the photoresistor can reach so that we know voltage is being limited in every way possible. 
+            </p>
+        </div>
+        
+    </body>
+</html>
