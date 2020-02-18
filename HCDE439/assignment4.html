@@ -1,0 +1,135 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Seung Won's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+            <h1>Seung Won's Assignment 4: High&#40;er&#41; voltage and transistors!</h1>
+            <p>
+            <img src="Press1.gif" width=400>
+            <img src="Press2.gif" width=400>
+            </p>
+            <p>
+                The gifs above display the behavior I created using the arduino, a N-MOFSET transistor, LED strip and a IR receiver. In this case the receiver captures signals sent from a remote and uses those signals to create different behaviors in the LED strip. If 1 was pressed it would blink slowly then blink quickly, if 2 was pressed then it would slowly become brigher then slowly fade back into being off.
+            </p>
+            <p>
+                The code used to accomplish this had some code that was modified from the IR receiver code that we worked on in class for lecture six along with some code that was used in the earlier Blink! and Fade! assignments.
+            </p>
+            <code>
+                // Includes the infrared remote library that we want to use for this program<br>
+                #include &#60;IRremote.h&#62;<br>
+
+                // constant variable set to the digital pin that will receive data from the infrared sensor<br>
+                const int RECV_PIN = 7;<br>
+                // constant variable set to the digital pin that controls the transistor and LED strip in turn<br>
+                const int TRAN_PIN = 9;<br>
+                // sets the receiverPin as a irrecv object<br>
+                IRrecv irrecv(RECV_PIN);<br>
+                // creates a variable called results that will store the code given by the receiver to be used by the irrecv object<br>
+                decode_results results;<br><br>
+
+
+                void setup() {<br>
+                <div style="margin-left: 2em">
+                    // sets the speed of the data upload to 9600 bits per minute<br>
+                    Serial.begin(9600);<br>
+                    // starts the IR receiver<br>
+                    irrecv.enableIRIn();<br>
+                    // will make LED on the arduino blink every time a signal is received<br>
+                    irrecv.blink13(true);<br>
+                    // sets the LEDPin to output so it can be controlled and does not automatically turn on the LED strip<br>
+                    pinMode(TRAN_PIN, OUTPUT);<br>
+                </div>
+                }<br><br>
+
+                void loop() {<br>
+                <div style="margin-left: 2em">
+                // the decode returns true if a signal is received. If a signal is received then the signal is stored as a HEX code in results<br>
+                if (irrecv.decode(&amp;results)){<br>
+                    <div style="margin-left: 2em">
+                    // Prints to the serial moniter the HEX code for the signal received. Used to verify a signal has been received visually<br>
+                    Serial.println(results.value, HEX);<br><br>
+
+                    // if the signal received was caused by pressing 1 the LED strip will blink slowly once and then quickly once<br>
+                    if(results.value ==  0xFF30CF) {<br>
+                        <div style="margin-left: 2em">
+                        // sets the value for the pin that controls the transistor's gate voltage to 0<br>
+                        analogWrite(TRAN_PIN, 0);<br>
+                        // waits for 1 second<br>
+                        delay(1000);<br>
+                        // sets the value for the pin that controls the transistor's gate voltage to 100<br>
+                        analogWrite(TRAN_PIN, 100);<br>
+                        // waits for 1 second<br>
+                        delay(1000);<br>
+                        // sets the value for the pin that controls the transistor's gate voltage to 0<br>
+                        analogWrite(TRAN_PIN, 0);<br>
+                        // waits for 1 second<br>
+                        delay(1000);<br>
+                        // sets the value for the pin that controls the transistor's gate voltage to 100<br>
+                        analogWrite(TRAN_PIN, 100);<br>
+                        // waits for 0.1 seconds<br>
+                        delay(100);<br>
+                        // sets the value for the pin that controls the transistor's gate voltage to 0<br>
+                        analogWrite(TRAN_PIN, 0);<br>
+                        </div>
+                    }<br><br>
+
+                    // if the signal received was caused by pressing 2 the LED strip will slowly brighten then fade back down<br>
+                    if(results.value == 0xFF18E7) {<br>
+                        <div style="margin-left: 2em">
+                        // for loop that starts the i value at 0 then rises to 255 in increments of 1<br>
+                        for(int i = 0; i &#60; 256; i++) {<br>
+                            <div style="margin-left: 2em">
+                            // sets the value of the pin that controls the transistor's gate voltage to the value of i<br>
+                            analogWrite(TRAN_PIN, i);<br>
+                            // waits for 0.01 seconds<br>
+                            delay(10);<br>
+                            </div>
+                        }<br>
+                        // for loop that starts at the i value 256 then falls to 0 in increments of 1<br>
+                        for(int i = 256; i >= 0;i--){<br>
+                            <div style="margin-left: 2em">
+                            // sets the value of the pin that controls the transistor's gate voltage to the value of i<br>
+                            analogWrite(TRAN_PIN, i);<br>
+                            // waits for 0.01 seconds<br>
+                            delay(10);<br>
+                            </div>
+                        }<br>
+                        </div>
+                    }<br>
+                    // resets the receiver so it can get a new signal<br>
+                    irrecv.resume();<br>
+                    </div>
+                }<br>
+                </div>
+            }
+            </code>
+            <p>
+            For this code I created two variables. RECV_PIN referred to the GPIO that was connected to the IR receiver and TRAN_PIN referred to the pin that was connected to the gate of the N- MOFSET transistor. In the actual code it would wait until the IR receiver got a signal from the remote. Then if it did it would print it to the serial so that I could check if a signal actually came because that was something I had struggled to verify while testing it and had to spend a lot of time debugging. Then depending on what button was pushed it exhibited different behaviors. If 1 was pushed then it would blink slowly then quickly. If 2 was pushed then the LED strip would slowly fade in and out once.
+            </p>
+            
+            <img src="IMG_1813.jpg" width="324">
+            <img src="IMG_1812.jpg" width="602">
+            
+            <p>
+            The images above display the circuit used for this project. In the images we see the transistor connected at three points; first to the 9 pin at the gate, then the LED output at the drain, and finally to ground at the source. The LED strip is connected to the transistor by its output wire and also to the 12V adapter by the input wire. The IR receiver is connected to ground at G, to the 5V pin on the arduino at R, and to the 7 pin at Y.  
+            </p>
+            
+            <img src="IMG_1817.jpg" width="400">
+            <p style="padding-bottom: 2em">
+            Finally, the image above shows the schematics of the LED strip, transistor, and IR receiver which all work together to create the product for this assignment. 
+            <br><br>
+            For this assignment some calculations outside of the normal calculations we make for resistors were needed. Because the transistor can only handle a max current of 32A we had to make sure that the current drawn by the LED strip would not be higher than what could be handled by the transistor. To calculate the current drawn by the LED strip we use the formula; P = V*I. By looking at the data provided on the box of the LED strip we can see that it has a power of 18 Watts and a voltage of 12, then by plugging in the values provided into the formula we are able to solve for the current that the LED draws, which is 1.5A which is much lower than the max that the transistor can handle meaning that it is okay to use this transistor with the LED strip.
+            </p>
+        </div>
+        
+    </body>
+</html>
