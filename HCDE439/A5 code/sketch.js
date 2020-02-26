@@ -1,6 +1,6 @@
 var serial; // variable to hold an instance of the serialport library
-var portName = '/dev/tty.usbmodem14101' //rename to the name of your port
-var dataarray = []; //some data coming in over serial!
+var portName = '/dev/tty.usbmodem14101'; //rename to the name of your port
+var datain; //some data coming in over serial!
 var xPos = 0;
 
 
@@ -16,7 +16,7 @@ function setup() {
   serial.list();                      // list the serial ports
   serial.open(portName);              // open a serial port
   createCanvas(1200, 800);
-  background(0x08, 0x16, 0x40);
+  background(255, 255, 255);
 }
  
 // get the list of ports:
@@ -45,7 +45,6 @@ function portClose() {
 }
 
 function serialEvent() {
-    console.log('Hello')
   if (serial.available()) {
     var datastring = serial.readLine(); // readin some serial
     var newarray; 
@@ -57,14 +56,15 @@ function serialEvent() {
     if (typeof(newarray) == 'object') {
       dataarray = newarray;
     }
-    console.log("got back " + datastring);
+    console.log("got back " + dataarray);
   } 
 }
 
 function graphData(newData) {
   // map the range of the input to the window height:
-  var yPos = map(newData, 0, 1023, 0, height);
-  // draw the line
+  var yPos = map(newData, 0, 255, 0, height);
+  // draw the line in a pretty color:
+  stroke(255, 0, 80);
   line(xPos, height, xPos, height - yPos);
   // at the edge of the screen, go back to the beginning:
   if (xPos >= width) {
@@ -72,10 +72,14 @@ function graphData(newData) {
     // clear the screen by resetting the background:
     background(0x08, 0x16, 0x40);
   } else {
-    // pass
+    // increment the horizontal position for the next reading:
+    xPos++;
   }
 }
 
 function draw() {
-  ellipse(dataarray[0], dataarray[1], 80, 80);
+  stroke(50);
+  fill(100);
+  text("x-value" + dataarray[0], 30, 30)
+  text("y-value" + dataarray[1], 30, 30)
 }
