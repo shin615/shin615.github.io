@@ -1,0 +1,204 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Seung Won's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+            <h1>Seung Won's Assignment 6: The Web Talks Back!</h1>
+            <p>
+            <img src="animated.gif" width=400>
+            </p>
+            <p>
+                The gif above shows how I used the arduino, joystick, and p5 to create a circle that can be moved on the web. The joystick sends data about the position of the joystick into the arduino this is then sent through the p5 serial control program and through websockets is able to continuously write the data to a webpage. In this case the data written in manipulates the js code written to create a moveable shape. The web talks back part comes in when a key is pressed on the keyboard causing the shape to change color and the led to turn on
+            </p>
+            <p>
+                The code used to accomplish this is based on the HCDE 439 example 2 code for the java script along with some code for the arduino taken from this post https://exploreembedded.com/wiki/Analog_JoyStick_with_Arduino. In addition the parts that were added for the arduino to receive data was taken from class examples along with this website https://itp.nyu.edu/physcomp/labs/labs-serial-communication/lab-serial-output-from-p5-js/
+            </p>
+            <p>
+                The arduino code
+            </p>
+            <code>
+                #define joyX A0 // sets the pin A0 to joyX<br>
+                #define joyY A1 // sets the pin A1 to joyY<br><br>
+
+
+                void setup() {  <br>
+                <div style="margin-left: 2em">
+                    // put your setup code here, to run once: <br>
+                    Serial.begin(9600); // sets the serial speed to 9600 <br>
+                    Serial.setTimeOut(10) // sets the time interval for the parseInt <br>
+                    pinMode(9, OUTPUT) //sets the digital pin 9 to OUPUT mode
+                </div>
+                } <br><br>
+
+                void loop() {<br>
+                <div style="margin-left: 2em">
+                    // put your main code here, to run repeatedly: <br>
+                    int x = analogRead(joyX); // sets the data read from joyX to int variable x <br>
+                    int y = analogRead(joyY); // sets the data read from joyY to int variable y <br>
+                    
+                    
+                    if (Serial.available() > 0) {   // checks to see if there's incoming serial data<br>
+                        int incomingByte = Serial.read(); // reads the data and sets it to the variable incomingByte <br>
+                        if (incomingByte == 104) {    // if it's a h (ASCII 104), <br>
+                            digitalWrite(9, HIGH); // turn on the LED <br>
+                        }<br>
+                        if (incomingByte == 108) {    // if it's an l (ASCII 108) <br>
+                            digitalWrite(9, LOW);  // turn off the LED<br>
+                        }<br>
+                    }<br>
+                    
+                    int drawX = map(x, 0, 671, 0, 500); // maps the value of x from the values given by joystick to between 0 and 500 <br>
+                    int drawY = map(y, 0, 671, 0, 500); // maps the value of y from the values given by joystick to between 0 and 500 <br>
+                    Serial.print("["); // prints open bracket to the serial <br>
+                    Serial.print(drawX); // prints the value of draw x to the serial <br>
+                    Serial.print(","); // prints comma to the serial <br>
+                    Serial.print(drawY); // prints the value of draw y to the serial <br>
+                    Serial.println("]"); // prints close bracket to the serial <br>
+                </div>
+                }
+            </code>
+            
+            <p>
+                The javascript code
+            </p>
+            
+            <code>
+                var serial; // variable representing the serialport library <br>
+                var portName = '/dev/tty.usbmodem14101'; //name of the port in where the arduino is plugged in <br>
+                var datain; // the data received from the arduino
+                <br>var xPos = 0; // initial position of the x, not used in this instance
+                <br>var dataarray = [0,0]; // initial creation of the data array that is parsed from the data received <br>
+
+
+                <br>function setup() {                    // first initial method that is run to set up p5
+                <div style="margin-left: 2em">
+                        serial = new p5.SerialPort();       // make a new instance of the serialport library
+                <br>    serial.on('list', printList);       // set a callback function for the serialport list event
+                <br>    serial.on('connected', serverConnected); // callback for connecting to the server
+                <br>    serial.on('open', portOpen);        // callback for the port opening
+                <br>    serial.on('data', serialEvent);     // callback for when new data arrives
+                <br>    serial.on('error', serialError);    // callback for errors
+                <br>    serial.on('close', portClose);      // callback for the port closing
+ 
+                <br> serial.list();                      // list the serial ports
+                <br>serial.open(portName);              // open a serial port
+                <br>    createCanvas(1200, 800);            // makes the canvas that will be drawn on
+                </div>
+                } <br><br>
+ 
+                // get the list of ports:
+                <br>function printList(portList) {
+                <div style="margin-left: 2em">
+                        // portList is an array of serial port names
+                <br>    for (var i = 0; i &lt; portList.length; i++) {
+                <br>        // Display the list the console:
+                <br>        print(i + " " + portList[i]);
+                <br>    }
+                </div>
+                }<br><br>
+
+                // prints if it is connected to server on the console <br>
+                function serverConnected() {
+                    <div style="margin-left: 2em">
+                    // prints message <br>
+                    print('connected to server.'); <br>
+                    </div>
+                } <br><br>
+
+                
+                // prints if the serial port is open on the console <br>
+                function portOpen() {
+                    <div style="margin-left: 2em">
+                    // prints message    <br>
+                    print('the serial port opened.') <br>
+                </div>
+                } <br><br>
+
+                // prints message that an error occured on the serial port along with the error <br>
+                function serialError(err) {
+                <div style="margin-left: 2em">
+                  // prints message    <br>
+                  print('Something went wrong with the serial port. ' + err); <br>
+                </div>
+                } <br><br>
+
+                // prints message that the serial port has closed <br>
+                function portClose() {
+                <div style="margin-left: 2em">
+                  // prints message    <br>
+                  print('The serial port closed.'); <br>
+                </div>
+                } <br><br>
+
+                // gathers and processes the data from the serial <br>
+                function serialEvent() {
+                <div style="margin-left: 2em">
+                  if (serial.available()) {             // checks if there is data available from the serial and if it is goes in <br>
+                    var datastring = serial.readLine(); // reads a line of data from the serial <br>
+                    var newarray;                       // creates a new variable called newarray <br>
+                    try {                               // tests the code for errors but still runs
+                    <div style="margin-left: 2em">
+                      newarray = JSON.parse(datastring); // uses JSON to parse the serial <br>
+                      } catch(err) {                     // if an error occured it is catched here
+                        <div style="margin-left: 2em">
+                          console.log(err);             // prints the error to the console
+                        </div>
+                    </div>
+                    } <br>
+                    if (typeof(newarray) == 'object') { // checks if newarray is an object, if it is it goes into the if statement
+                    <div style="margin-left: 2em">
+                      dataarray = newarray;             // sets the variable dataarray equal to the values of newarray
+                    </div>
+                    } <br>
+                    console.log("got back " + dataarray); // prints the data received to the console <br>
+                  } 
+                </div>
+                } <br><br>
+
+                // draws in a continuous loop <br>
+                function draw() {
+                <div style="margin-left: 2em">
+                  // draws a white background <br>
+                  background(255, 255, 255); <br>
+                  // sets stroke of circle to 50 <br>   
+                  stroke(50); <br>
+                  if(key == 'h') { // checks to see if the key pressed was an h if it was it executes the program inside <br>
+                        fill(255); //sets the color of the circle to white <br>
+                        serial.write('h'); //writes to the serial the letter h <br>
+                  } else if (key == 'l') { //hecks to see if the key pressed was an l if it was it executes the program inside <br>
+                        fill(0); // sets the color of the circle to black <br>
+                        serial.write('l'); // writes to the serial the letter l <br>
+                  }     <br>
+                  // draws a circle with a diameter of 30 pixels and x,y position based on position of joystick <br>    
+                  ellipse(dataarray[0], dataarray[1], 30,30); <br>
+                </div>
+                }
+            </code>
+            <p>
+                The arduino only takes in the values from the joystick and writes them to the serial. The javascript then takes in the data and uses it to change the position of the circle drawn on the canvas. Then if an h or l is pressed on the computer it writes the those letters as data to the serial which is used by the the arduino to either turn on the led if h is sent or turn it off if l is sent. If data is sent then in the arduino it checks to see if the int incomingByte matches the ASCII decimal value for h which is 104 or if it matches the ASCII value for l which is 108 and depending on what it receives it either turns on or off the LED.
+            </p>
+            
+            <img src="IMG_1838.jpg" width="400">
+            
+            <p>
+                The image above shows the circuit used for this assignment. In this case it is a very simple circuit connecting the ground on the joystick to the ground on the arduino, the 5V on the joystick to the 5V on the arduino, the VRx on the joystick to A0, and the VRy on the joystick to A1. On the arduino side it has an LED connected to pin 9 with a resistor of 220.
+            </p>
+            
+            <img src="IMG_1831.jpg" width="400">
+            <img src="IMG_1836.jpg" width="400">
+            <p style="padding-bottom: 2em">
+                Finally we have the schematic for this assignment it has the schematic for the joystick which was fairly simple and did not require calculations and for the LED which shows a green LED with a resistor of 220 because it has a voltage drop of 1.8 so with the current that usually flows through the arduino it would need a 220 resistor.
+            </p>
+        </div>
+        
+    </body>
+</html>
