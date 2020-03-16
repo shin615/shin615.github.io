@@ -1,0 +1,80 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Seung Won's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+            <h1>Seung Won's Final Project!</h1>
+            <p>
+            <img src="HCDE%20439%20Final%20Project%20ideas.jpg" width=400>
+            </p>
+            <p>
+                The sketches above show the evolution of the concept for my final project. From the beginning I wanted to create a small fan that had multiple settings that could be manipulated by input from a user. However, in my first draft I thought about using a button that the user would press so that they could change settings but I realized that it would be a bad interface for the user. So, I changed the input to a dial that they could twist to change settings. That is how I ended up with my final concept of a small fan powered by the arduino with settings that could be manipulated by a dial.
+            </p>
+            <p>
+                The code used to accomplish this is shown below it is a fairly simple code utilizing an if else statement and analog read and write.
+            </p>
+            <p>
+                The arduino code
+            </p>
+            <code>
+                #define fancontrol A0 //gives pin A0 the name fancontrol <br>
+                int fanPin = 3; // sets value of int variable fanPin to 3 <br><br>
+
+                void setup() {<br>
+                <div style="margin-left: 2em">
+                    Serial.begin(9600); //sets serial speed<br>
+                    pinMode(fanPin, OUTPUT); //sets pin 3 on arduino to output<br>
+                </div>
+                }<br><br>
+
+                void loop() {<br>
+                    <div style="margin-left: 2em">
+                    int theValue = analogRead(fancontrol); // sets the variable theValue to whatever value is read in from the potentiometer<br>
+                    Serial.println(theValue); // prints that value to the serial monitor so that it can be checked<br>
+                    if (theValue > 950) { // checks if theValue is greater than 950 if it is then the code inside is executed<br>
+                        <div style="margin-left: 2em">
+                        analogWrite(fanPin, 255); // sends the highest amount of power to the motor <br>
+                        </div>
+                    } else if (theValue &lt; 680 &amp;&amp; theValue > 640 ) { // checks if theValue is both bigger than 640 and smaller than 680 and if it is runs the code inside <br>
+                        <div style="margin-left: 2em">
+                        analogWrite(fanPin, 128); // sends medium amount of power to the motor <br>
+                        </div>
+                    } else { // if the value does not pass the previous tests execute the code inside<br>
+                        <div style="margin-left: 2em">
+                        analogWrite(fanPin, 0); // sends no power to  the motor<br>
+                        </div>
+                    }<br>
+                </div>
+                }
+            </code>
+            <br><br>
+            
+            <img src="IMG_1857.jpg" width="400">
+            
+            <p>
+                The image above shows the circuit used for this project. It utilizes a motor, N-MOSFET Transisitor, flyback diode, and potentiometer. First we see the motor connected to the breadboard with a flyback diode to prevent the flyback itself. It is then connected by a wire to the drain of the N-MOSFET. The MOSFET is also connected to ground at the source which also grounds the motor, and for its gate it is connected to the 3 pin on the Arduino. Having the motor connected to 3 is also what allows us to analogWrite to the motor. For the other part of the fan we have the potentiometer. The potentiometer is connected to the 5V pin on the arduino through its in pin then on its out it is connected to ground by a 10K resistor, which is put in place in the case that the potentiometer's resistance is set to zero, and to the A0 analog pin by a wire. By having this set up we are able to make changes to the potentiometer and based on the data the changed potentiometer gives to the arduino make the motor have different behavior.
+            </p>
+            
+            <img src="HCDE%20439%20:%20Final%20Project%20Schematic.jpg" width="400">
+            <p style="padding-bottom: 2em">
+                Finally we have the schematic for this project. There is a bit of an edit because I had originally thought about having the motor connected to a 12V power source but in the end just connected it to the arduino as well in order to reduce the number of wires and have it better fit in the encasing I created. With that in mind. This schematic shows the potentiometer connected to 5V of power, the A0 pin and to ground through the 10K resistor. On the other side we have the motor also connected to the 5V power source, with a flyback diode and connected to the trasistor which connects the motor to pin 3 and ground.
+            </p>
+            
+            <p>
+                Finally, here is the link and video of my project's demo: <a href="https://www.youtube.com/watch?v=VUn8xnWBuH4">My Project Demo!</a>
+            </p>
+            
+            <iframe style="padding-bottom: 2em" width="560" height="315" src="https://www.youtube.com/embed/VUn8xnWBuH4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        
+    </body>
+</html>
